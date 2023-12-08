@@ -20,22 +20,27 @@ public class Main {
    public static void main(String[] args) throws IOException {
       System.out.println("Hello world!");
 
-      var sumOfIds = getSumIdOfGamesWhoWork();
-      System.out.println("sum of ids: " + sumOfIds);
-   }
-
-   private static int getSumIdOfGamesWhoWork() throws IOException {
       var lines = Files.lines(Path.of(Main.class.getResource("/puzzleInput.txt").getPath()))
             .map(String::trim)
             .toList();
 
+      var sumOfIds = getSumIdOfGamesWhoWork(lines);
+      System.out.println("sum of ids: " + sumOfIds[0]);
+      System.out.println("sum of power cubes: " + sumOfIds[1]);
+   }
+
+   private static int[] getSumIdOfGamesWhoWork(List<String> lines) throws IOException {
       var possibleGames = new ArrayList<Integer>();
+      var powerOfCubes = new ArrayList<Integer>();
       for (int i = 0; i < lines.size(); i++) {
          var line = lines.get(i).replaceAll(" ", "");
          var gameLine = line.split(":")[1];
          var games = gameLine.split(";");
          Arrays.stream(games).forEach(System.out::println);
          var gamePossible = true;
+         var minRed = 0;
+         var minBlue = 0;
+         var minGreen = 0;
          for (var game: games) {
             reset();
             var gm = new Game();
@@ -61,10 +66,19 @@ public class Main {
                if(foundMatch.isPresent()) {
                   if (foundMatch.get().getKey().equals("red")) {
                      gm.red = lastNum;
+                     if(lastNum > minRed) {
+                        minRed = lastNum;
+                     }
                   } else if (foundMatch.get().getKey().equals("blue")) {
                      gm.blue = lastNum;
+                     if(lastNum > minBlue) {
+                        minBlue = lastNum;
+                     }
                   } else if (foundMatch.get().getKey().equals("green")) {
                      gm.green = lastNum;
+                     if(lastNum > minGreen) {
+                        minGreen = lastNum;
+                     }
                   }
                   reset();
                   lastNum = 0;
@@ -72,16 +86,19 @@ public class Main {
             }
             if (gm.red > maxPerColor.get("red") || gm.blue > maxPerColor.get("blue") || gm.green > maxPerColor.get("green")) {
                gamePossible = false;
-               break;
             }
          }
 
-         System.out.println(gamePossible + " possible: " + line);
+         System.out.println("min red: " + minRed + " min blue: " + minBlue + " min green: " + minGreen);
+
+         powerOfCubes.add(minRed * minBlue * minGreen);
          if (gamePossible) {
             possibleGames.add(i + 1);
          }
       }
-      return possibleGames.stream().mapToInt(Integer::intValue).sum();
+      int posGames = possibleGames.stream().mapToInt(Integer::intValue).sum();
+      int sumPowerCubes = powerOfCubes.stream().mapToInt(Integer::intValue).sum();
+      return new int[]{posGames, sumPowerCubes};
    }
 
    private static void reset() {
