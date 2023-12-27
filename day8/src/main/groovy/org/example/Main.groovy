@@ -10,7 +10,12 @@ static void main(String[] args) {
    def triedL = false
    def tries = []
    while (search != find) {
-      for (int i = 0; i < file.size(); i++) {
+
+   }
+
+
+   def find(arr  ) {
+      for (int = 0; i < file.size(); i++) {
          if (i == 0 || i == 1 || i == 2) {
             continue
          }
