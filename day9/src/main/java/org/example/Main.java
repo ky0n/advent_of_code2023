@@ -19,6 +19,7 @@ public class Main {
             .collect(Collectors.toList());
 
       BigInteger sum = new BigInteger("0");
+      BigInteger sumBehind = new BigInteger("0");
       for (var line : lines) {
          ArrayList<Integer> numbers = new ArrayList<>();
          Matcher matcher = pattern.matcher(line);
@@ -58,12 +59,28 @@ public class Main {
                }
                lineSolution = allNewNums.get(0).get(allNewNums.get(0).size() - 1);
                sum = sum.add(BigInteger.valueOf(lineSolution));
+
+               nextNums.add(0, 0);
+               var lastNumBehind = 0;
+               int lineSolutionBehind;
+               for (int j = allNewNums.size() - 2; j >= 0; j--) {
+                  var l = allNewNums.get(j);
+                  var newNum = l.get(0) - lastNumBehind;
+                  l.add(0, newNum);
+                  lastNumBehind = newNum;
+               }
+               lineSolutionBehind = allNewNums.get(0).get(0);
+               sumBehind = sumBehind.add(BigInteger.valueOf(lineSolutionBehind));
             }
          }
       }
       System.out.println("sum " + sum);
+      System.out.println("sum behind " + sumBehind);
 
       // 1079128959 too low
       // 2022497258 too high
+
+      // 2nd
+      // 2133 too high
    }
 }
