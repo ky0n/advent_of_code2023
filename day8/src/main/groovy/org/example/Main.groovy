@@ -13,26 +13,25 @@ class Main {
 
       def relevantLine = lines.get(0)
       def found = false
+      def p = 0
       while(!found) {
-      for (int i = 0; i < relevantLine.trim().length(); i++) {
-         char c = relevantLine.charAt(i)
-         int n = getLine(lines, search)
-         def line = lines.get(n + 2)
-         if (c == 'L') {
-            search = line.substring(line.indexOf("(") + 1, line.indexOf(","))
-            println 'L'
-         } else if (c == 'R') {
-            search = line.substring(line.indexOf(",") + 2, line.indexOf(")"))
-            println 'R'
-         }
+         for (int i = 0; i < relevantLine.trim().length(); i++) {
+            char c = relevantLine.charAt(i)
+            int n = getLine(lines, search)
+            def line = lines.get(n)
+            if (c == 'L') {
+               search = line.substring(line.indexOf("(") + 1, line.indexOf(","))
+            } else if (c == 'R') {
+               search = line.substring(line.indexOf(",") + 2, line.indexOf(")"))
+            }
 
-         println search
-         println i
-         if (search == "ZZZ") {
-            println "FOUND"
-            println (i + 1)
-            break
+            if (search == "ZZZ") {
+               found = true
+               println (p + i + 1)
+               break
+            }
          }
+         p += relevantLine.trim().length()
       }
 
       //def numMoves = solve(lines)
@@ -79,3 +78,4 @@ class Main {
 
 
 // 307 too low
+// 18112 too low
