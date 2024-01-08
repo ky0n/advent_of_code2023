@@ -34,6 +34,49 @@ class Main {
          p += relevantLine.trim().length()
       }
 
+      // second task
+      def found2 = false
+      def p2 = 0
+      def currentLines = new ArrayList<Integer>()
+      def searchs = new ArrayList<String>()
+      while(!found2) {
+         for (int i = 0; i < relevantLine.trim().length(); i++) {
+            char c = relevantLine.charAt(i)
+            if (currentLines.isEmpty()) {
+               currentLines = starterLines(lines)
+            } else {
+               currentLines = new ArrayList<Integer>()
+               for (int j = 0; j < searchs.size(); j++) {
+                  int n = getLine(lines, searchs.get(j))
+                  currentLines.add()
+               }
+
+            }
+            def nextLines = new ArrayList<Integer>()
+            def nextSearchs = new ArrayList<String>()
+            for (int j = 0; j < currentLines.size(); j++) {
+               String line = lines.get(currentLines.get(j))
+               if (c == 'L') {
+                  nextSearchs.add(line.substring(line.indexOf("(") + 1, line.indexOf(",")))
+               } else if (c == 'R') {
+                  nextSearchs.add(line.substring(line.indexOf(",") + 2, line.indexOf(")")))
+               }
+            }
+
+            searchs = nextSearchs
+
+            if (searchs.stream().allMatch { it.endsWith("Z") }) {
+               found2 = true
+               println (p2 + i + 1)
+               break
+            }
+
+            currentLines = nextLines
+            p2 += relevantLine.trim().length()
+         }
+      }
+
+
       //def numMoves = solve(lines)
       //println numMoves
    }
@@ -45,6 +88,17 @@ class Main {
             return i
          }
       }
+   }
+
+   private static ArrayList<Integer> starterLines(ArrayList<String> lines) {
+      def starter = []
+      for (int i = 2; i < lines.size(); i++) {
+         def line = lines[i]
+         if (line.charAt(2) == 'A') {
+            starter.add(i)
+         }
+      }
+      return starter
    }
 
 
